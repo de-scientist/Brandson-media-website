@@ -1,3 +1,4 @@
+import HeroSection from "@/components/HeroSection"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
@@ -88,7 +89,7 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Navbar />
        <HeroSection />
-       
+
       {/* Services Overview */}
       <section className="py-20 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
