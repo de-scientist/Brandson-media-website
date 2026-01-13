@@ -17,7 +17,7 @@ const portfolioItems = [
   { title: "Conference Event Setup", category: "Events", image: "/corporate-conference-event-branding.jpg" },
   { title: "Acrylic Menu Holders", category: "Signage", image: "/acrylic-menu-holders.jpg" },
   { title: "Promotional Pens", category: "UV Printing", image: "/branded-pens.jpg" },
-  { title: "Business Cards", category: "Printing", image: "/placeholder.svg?height=400&width=600" },
+  { title: "Corporate Promotional", category: "Printing", image: "/promotional.jpg" },
   { title: "Signs", category: "Signage", image: "/IMG20230907195815.jpg" },
   { title: "Event Backdrop", category: "Events", image: "/event-backdrop.jpg" },
   { title: "Embroidery", category: "Branding", image: "/embroidery.jpg" },
