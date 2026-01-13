@@ -25,6 +25,7 @@ const heroImages = [
   "/promotional-printing.jpg",
 ]
 
+import { useEffect, useState } from "react"
 
 
 const services = [
