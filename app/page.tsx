@@ -87,7 +87,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <Navbar />
-
+       <HeroSection />
+       
       {/* Services Overview */}
       <section className="py-20 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
