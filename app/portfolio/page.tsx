@@ -15,7 +15,7 @@ const portfolioItems = [
   { title: "Restaurant 3D Signage", category: "Signage", image: "/3d-restaurant-signage-illuminated.jpg" },
   { title: "Branded Water Bottles", category: "UV Printing", image: "/uv-printed-branded-water-bottles.jpg" },
   { title: "Conference Event Setup", category: "Events", image: "/corporate-conference-event-branding.jpg" },
-  { title: "Acrylic Menu Holders", category: "Signage", image: "/acrylic-menu-holders.jpeg" },
+  { title: "Acrylic Menu Holders", category: "Signage", image: "/acrylic-menu-holders.jpg" },
   { title: "Promotional Pens", category: "UV Printing", image: "/placeholder.svg?height=400&width=600" },
   { title: "Business Cards", category: "Printing", image: "/placeholder.svg?height=400&width=600" },
   { title: "Hotel Door Signs", category: "Signage", image: "/placeholder.svg?height=400&width=600" },
