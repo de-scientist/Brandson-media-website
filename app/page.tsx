@@ -75,7 +75,7 @@ const features = [
 ]
 
 const portfolioItems = [
-  { title: "Corporate Branding", category: "Branding", image: "/corporate-branded-merchandise-t-shirts.jpg" },
+  { title: "Corporate Branding", category: "Branding", image: "/branded-corporate-t-shirts-uniform.jpg" },
   { title: "Event Banners", category: "Printing", image: "/professional-event-banners-displays.jpg" },
   { title: "Vehicle Wrapping", category: "Branding", image: "/branded-vehicle-car-wrapping.jpg" },
   { title: "3D Signage", category: "Signage", image: "/3d-company-signage-letters.jpg" },
