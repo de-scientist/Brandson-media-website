@@ -18,7 +18,7 @@ const portfolioItems = [
   { title: "Acrylic Menu Holders", category: "Signage", image: "/acrylic-menu-holders.jpg" },
   { title: "Promotional Pens", category: "UV Printing", image: "/placeholder.svg?height=400&width=600" },
   { title: "Business Cards", category: "Printing", image: "/placeholder.svg?height=400&width=600" },
-  { title: "Hotel Door Signs", category: "Signage", image: "/placeholder.svg?height=400&width=600" },
+  { title: "Hotel Door Signs", category: "Signage", image: "/IMG20230907195815.jpg" },
   { title: "Event Backdrop", category: "Events", image: "/placeholder.svg?height=400&width=600" },
   { title: "Branded Aprons", category: "Branding", image: "/placeholder.svg?height=400&width=600" },
 ]
