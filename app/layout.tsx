@@ -61,9 +61,9 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: "/images/brandson logo1.svg",
-    shortcut: "/images/brand.png",
-    apple: "/images/brand.png",
+    icon: "/images/web-app-manifest-192x192.png",
+    shortcut: "/images/web-app-manifest-192x192.png",
+    apple: "/images/web-app-manifest-192x192.png",
   },
 
   robots: {
