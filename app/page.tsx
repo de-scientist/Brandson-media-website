@@ -19,6 +19,14 @@ import {
   ArrowRight,
 } from "lucide-react"
 
+const heroImages = [
+  "/modern-printing-press-industrial.jpg",
+  "/branding-signage.jpg",
+  "/promotional-printing.jpg",
+]
+
+
+
 const services = [
   {
     icon: Printer,
