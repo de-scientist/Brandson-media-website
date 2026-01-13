@@ -16,7 +16,7 @@ const portfolioItems = [
   { title: "Branded Water Bottles", category: "UV Printing", image: "/uv-printed-branded-water-bottles.jpg" },
   { title: "Conference Event Setup", category: "Events", image: "/corporate-conference-event-branding.jpg" },
   { title: "Acrylic Menu Holders", category: "Signage", image: "/acrylic-menu-holders.jpg" },
-  { title: "Promotional Pens", category: "UV Printing", image: "/placeholder.svg?height=400&width=600" },
+  { title: "Promotional Pens", category: "UV Printing", image: "/branded-pens.jpg" },
   { title: "Business Cards", category: "Printing", image: "/placeholder.svg?height=400&width=600" },
   { title: "Signs", category: "Signage", image: "/IMG20230907195815.jpg" },
   { title: "Event Backdrop", category: "Events", image: "/event-backdrop.jpg" },
