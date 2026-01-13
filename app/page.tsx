@@ -1,4 +1,3 @@
-"use client"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
@@ -18,15 +17,6 @@ import {
   DollarSign,
   ArrowRight,
 } from "lucide-react"
-
-const heroImages = [
-  "/modern-printing-press-industrial.jpg",
-  "/branding-signage.jpg",
-  "/promotional-printing.jpg",
-]
-
-import { useEffect, useState } from "react"
-
 
 const services = [
   {
@@ -97,17 +87,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <Navbar />
-
-      const [activeIndex, setActiveIndex] = useState(0)
-
-useEffect(() => {
-  const interval = setInterval(() => {
-    setActiveIndex((prev) => (prev + 1) % heroImages.length)
-  }, 6000)
-
-  return () => clearInterval(interval)
-}, [])
-
 
       {/* Hero Section */}
       <section className="relative bg-dark-section-bg text-dark-section-fg overflow-hidden">
