@@ -20,7 +20,7 @@ const portfolioItems = [
   { title: "Business Cards", category: "Printing", image: "/placeholder.svg?height=400&width=600" },
   { title: "Signs", category: "Signage", image: "/IMG20230907195815.jpg" },
   { title: "Event Backdrop", category: "Events", image: "/event-backdrop.jpg" },
-  { title: "Branded Aprons", category: "Branding", image: "/placeholder.svg?height=400&width=600" },
+  { title: "Embroidery", category: "Branding", image: "/embroidery.jpg" },
 ]
 
 export default function PortfolioPage() {
