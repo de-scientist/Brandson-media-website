@@ -110,6 +110,13 @@ export default function PortfolioPage() {
               </a>
             </Button>
           </div>
+          <div className="mt-8">
+            <Button size="lg" className="bg-background text-foreground hover:bg-background/90" asChild>
+              <a href="https://photos.app.goo.gl/62LxMxU1mRU2efhp7" target="_blank" rel="noopener noreferrer">
+                View Our Gallery
+              </a>
+            </Button>
+          </div>
         </div>
       </section>
 
