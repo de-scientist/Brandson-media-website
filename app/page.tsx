@@ -88,41 +88,6 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative bg-dark-section-bg text-dark-section-fg overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/modern-printing-press-industrial.jpg')] bg-cover bg-center opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance">
-              Turning Ideas Into <span className="text-primary">Powerful</span>{" "}
-              <span className="text-secondary">Visual Brands</span>
-            </h1>
-            <p className="mt-6 text-xl text-dark-section-fg/80 leading-relaxed">
-              Printing • Branding • Signage • Promotional Solutions
-            </p>
-            <p className="mt-4 text-lg text-dark-section-fg/70 leading-relaxed max-w-2xl">
-              We help businesses, hotels, institutions, and events stand out with high-quality printing, branding, and
-              signage solutions in Nairobi, Kenya.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-                <a href="https://wa.me/254701869821" target="_blank" rel="noopener noreferrer">
-                  Get a Quote
-                </a>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-dark-section-fg/30 text-dark-section-fg hover:bg-dark-section-fg/10 bg-transparent"
-                asChild
-              >
-                <Link href="/services">View Our Services</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Services Overview */}
       <section className="py-20 bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
