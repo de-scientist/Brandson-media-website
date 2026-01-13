@@ -98,6 +98,17 @@ export default function HomePage() {
     <div className="min-h-screen">
       <Navbar />
 
+      const [activeIndex, setActiveIndex] = useState(0)
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setActiveIndex((prev) => (prev + 1) % heroImages.length)
+  }, 6000)
+
+  return () => clearInterval(interval)
+}, [])
+
+
       {/* Hero Section */}
       <section className="relative bg-dark-section-bg text-dark-section-fg overflow-hidden">
         <div className="absolute inset-0 bg-[url('/modern-printing-press-industrial.jpg')] bg-cover bg-center opacity-20" />
