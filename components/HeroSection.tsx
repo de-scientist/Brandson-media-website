@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 
 const heroImages = [
   "/modern-printing-press-industrial.jpg",
+  "/modern-printing-press-industrial2.jpg",
   "/branding-signage.jpg",
   "/promotional-printing.jpg",
 ]
