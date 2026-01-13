@@ -9,6 +9,7 @@ const heroImages = [
   "/modern-printing-press-industrial2.jpg",
   "/branding-signage.jpg",
   "/promotional-printing.jpg",
+  "/3d-printing.jpg",
 ]
 
 export default function HeroSection() {
