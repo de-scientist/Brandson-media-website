@@ -23,7 +23,7 @@ export const blogPosts: BlogPost[] = [
   {
   id: "1",
   slug: "benefits-of-led-billboards-for-modern-business-advertising",
-  title: "The Benefits of LED Billboards for Modern Business Advertising",
+  title: "<h1>The Benefits of LED Billboards for Modern Business Advertising</h1>",
   excerpt:
     "Discover why LED billboards are transforming outdoor advertising. Learn how digital signage boosts visibility, brand recall, and return on investment for businesses in Kenya.",
   content: `
