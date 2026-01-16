@@ -113,15 +113,46 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Main Article Body */}
             <article className="flex-1 max-w-3xl mx-auto">
-              <div
-                className="prose prose-zinc lg:prose-xl dark:prose-invert max-w-none
-                  prose-headings:text-foreground prose-headings:font-bold
-                  prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:text-lg
-                  prose-strong:text-foreground prose-strong:font-semibold
-                  prose-img:rounded-2xl prose-img:shadow-lg
-                  prose-a:text-primary prose-a:font-medium prose-a:no-underline hover:prose-a:underline"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+  <div
+    className="prose prose-zinc lg:prose-xl dark:prose-invert max-w-none
+      /* Heading Styling */
+      prose-headings:text-foreground 
+      prose-headings:font-bold 
+      prose-headings:tracking-tight
+      prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-2
+      prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
+      
+      /* Paragraph & Bold Text */
+      prose-p:text-muted-foreground/90 
+      prose-p:leading-relaxed 
+      prose-p:mb-6
+      prose-strong:text-foreground 
+      prose-strong:font-bold 
+      prose-strong:bg-primary/5 
+      prose-strong:px-1 
+      prose-strong:rounded
+      
+      /* Lists & Blockquotes */
+      prose-li:text-muted-foreground 
+      prose-ul:list-disc prose-ul:pl-6
+      prose-ol:list-decimal prose-ol:pl-6
+      prose-blockquote:border-l-primary 
+      prose-blockquote:bg-muted/30 
+      prose-blockquote:py-2 
+      prose-blockquote:pr-4 
+      prose-blockquote:rounded-r-lg
+      prose-blockquote:italic
+      
+      /* Images & Links */
+      prose-img:rounded-2xl 
+      prose-img:shadow-xl
+      prose-a:text-primary 
+      prose-a:font-semibold 
+      prose-a:no-underline 
+      hover:prose-a:underline 
+      hover:prose-a:text-primary/80"
+    dangerouslySetInnerHTML={{ __html: post.content }}
+  />
 
               {/* Author Bio Section */}
               <div className="mt-16 p-8 rounded-3xl bg-muted/50 border border-border flex flex-col sm:flex-row gap-6 items-center">
