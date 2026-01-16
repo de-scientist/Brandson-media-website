@@ -115,14 +115,11 @@ export default async function BlogPostPage({ params }: Props) {
             <article className="flex-1 max-w-3xl mx-auto">
   <div
     className="prose prose-zinc lg:prose-xl dark:prose-invert max-w-none
-      /* Heading Styling */
       prose-headings:text-foreground 
       prose-headings:font-bold 
       prose-headings:tracking-tight
       prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-2
       prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-      
-      /* Paragraph & Bold Text */
       prose-p:text-muted-foreground/90 
       prose-p:leading-relaxed 
       prose-p:mb-6
@@ -131,8 +128,6 @@ export default async function BlogPostPage({ params }: Props) {
       prose-strong:bg-primary/5 
       prose-strong:px-1 
       prose-strong:rounded
-      
-      /* Lists & Blockquotes */
       prose-li:text-muted-foreground 
       prose-ul:list-disc prose-ul:pl-6
       prose-ol:list-decimal prose-ol:pl-6
@@ -142,8 +137,6 @@ export default async function BlogPostPage({ params }: Props) {
       prose-blockquote:pr-4 
       prose-blockquote:rounded-r-lg
       prose-blockquote:italic
-      
-      /* Images & Links */
       prose-img:rounded-2xl 
       prose-img:shadow-xl
       prose-a:text-primary 

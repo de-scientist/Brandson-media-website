@@ -23,40 +23,40 @@ export const blogPosts: BlogPost[] = [
   {
   id: "1",
   slug: "benefits-of-led-billboards-for-modern-business-advertising",
-  title: "<h1>The Benefits of LED Billboards for Modern Business Advertising</h1>",
+  title: "The Benefits of LED Billboards for Modern Business Advertising",
   excerpt:
     "Discover why LED billboards are transforming outdoor advertising. Learn how digital signage boosts visibility, brand recall, and return on investment for businesses in Kenya.",
   content: `
     <h2>Why Visibility Matters in Modern Advertising</h2>
-    <p>In a world where attention is the new currency, visibility is everything. Businesses no longer compete only on quality or price — they compete for seconds of attention. LED billboards have emerged as powerful tools that help brands stand out in busy urban environments.</p>
+    <p>In a world where <strong>attention is the new currency</strong>, visibility is everything. Businesses no longer compete only on quality or price — they compete for seconds of attention. LED billboards have emerged as powerful tools that help brands stand out in busy urban environments.</p>
 
-    <h2>1. Unmatched Visibility, Day and Night</h2>
-    <p>LED billboards remain bright, clear, and vibrant regardless of time or weather. Unlike traditional printed billboards that rely on daylight or external lighting, LED displays ensure your message is visible 24 hours a day.</p>
-    <p>This consistent visibility increases brand recall and ensures your business remains top of mind for commuters and pedestrians.</p>
+    <h2>Unmatched Visibility, Day and Night</h2>
+    <p>LED billboards remain <strong>bright, clear, and vibrant</strong> regardless of time or weather. Unlike traditional printed billboards that rely on daylight or external lighting, LED displays ensure your message is visible <strong>24 hours a day</strong>.</p>
+    <blockquote>This consistent visibility increases brand recall and ensures your business remains top of mind for commuters and pedestrians.</blockquote>
 
-    <h2>2. Dynamic Content That Captures Attention</h2>
-    <p>Movement naturally attracts the human eye. LED billboards allow brands to display animations, videos, and rotating messages, turning one advertising space into multiple opportunities.</p>
-    <p>This flexibility keeps your content fresh and prevents audience fatigue.</p>
+    <h2>Dynamic Content That Captures Attention</h2>
+    <p>Movement naturally attracts the human eye. LED billboards allow brands to display <strong>animations, videos, and rotating messages</strong>, turning one advertising space into multiple opportunities.</p>
+    <blockquote>Dynamic content keeps your message fresh and prevents audience fatigue, increasing engagement.</blockquote>
 
-    <h2>3. Cost-Effective Advertising Over Time</h2>
-    <p>Although LED billboards may require a higher initial investment, they significantly reduce long-term costs. There are no recurring printing expenses, and content updates can be made instantly without additional production costs.</p>
+    <h2>Cost-Effective Advertising Over Time</h2>
+    <p>Although LED billboards may require a higher initial investment, they significantly reduce long-term costs. There are <strong>no recurring printing expenses</strong>, and content updates can be made instantly without additional production costs.</p>
 
-    <h2>4. Real-Time Content Updates</h2>
+    <h2>Real-Time Content Updates</h2>
     <p>LED technology allows businesses to update their advertisements remotely. Whether promoting a flash sale, announcing an event, or updating pricing, changes can be made within minutes.</p>
 
-    <h2>5. Strong Brand Positioning</h2>
-    <p>Brands that use LED billboards are often perceived as modern, professional, and established. High-quality digital signage elevates brand image and builds trust with potential customers.</p>
+    <h2>Strong Brand Positioning</h2>
+    <p>Brands that use LED billboards are often perceived as <strong>modern, professional, and established</strong>. High-quality digital signage elevates brand image and builds trust with potential customers.</p>
 
-    <h2>6. Environmentally Friendly Solution</h2>
+    <h2>Environmentally Friendly Solution</h2>
     <p>LED billboards reduce paper waste and ink usage, making them a more sustainable advertising option compared to traditional print signage.</p>
 
-    <h2>7. Ideal for High-Traffic Locations</h2>
+    <h2>Ideal for High-Traffic Locations</h2>
     <p>Placed along highways, busy roads, malls, and commercial centres, LED billboards reach thousands of people daily, reinforcing brand presence through repetition.</p>
 
     <h2>Why LED Billboards Are the Future</h2>
-    <p>With their flexibility, visibility, and cost efficiency, LED billboards represent the future of outdoor advertising. They allow businesses to communicate clearly, creatively, and effectively in fast-moving urban environments.</p>
+    <p>With their <strong>flexibility, visibility, and cost efficiency</strong>, LED billboards represent the future of outdoor advertising. They allow businesses to communicate clearly, creatively, and effectively in fast-moving urban environments.</p>
 
-    <p><strong>Brandson Media</strong> provides professional LED billboard solutions, from design to deployment, helping businesses turn attention into action.</p>
+    <blockquote><strong>Brandson Media</strong> provides professional LED billboard solutions, from design to deployment, helping businesses turn attention into action.</blockquote>
   `,
   featuredImage: "/led-billboard-advertising-nairobi-kenya.jfif",
   category: "Outdoor Advertising",
@@ -69,7 +69,8 @@ export const blogPosts: BlogPost[] = [
   seoTitle: "Benefits of LED Billboards for Business Advertising | Brandson Media",
   seoDescription:
     "Learn the key benefits of LED billboards for modern business advertising in Nairobi and across Kenya. Discover how digital signage improves visibility, engagement, and ROI.",
-},
+}
+,
   {
     id: "2",
     slug: "corporate-branding-tips-for-kenyan-businesses",
