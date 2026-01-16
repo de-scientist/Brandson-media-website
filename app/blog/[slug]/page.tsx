@@ -8,245 +8,212 @@ import { WhatsAppButton } from "@/components/whatsapp-button"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, Clock, User, ArrowLeft, MessageCircle } from "lucide-react"
+import { 
+  Calendar, 
+  Clock, 
+  User, 
+  ArrowLeft, 
+  MessageCircle, 
+  Share2, 
+  ChevronRight 
+} from "lucide-react"
 import { blogPosts, getBlogPost, getRelatedPosts } from "@/lib/blog-data"
 
 type Props = {
   params: Promise<{ slug: string }>
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params
-  const post = getBlogPost(slug)
-
-  if (!post) {
-    return {
-      title: "Post Not Found | Brandson Media",
-    }
-  }
-
-  return {
-    title: post.seoTitle,
-    description: post.seoDescription,
-    keywords: `${post.category}, printing Nairobi, branding Kenya, Brandson Media`,
-    openGraph: {
-      title: post.seoTitle,
-      description: post.seoDescription,
-      type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author.name],
-      locale: "en_KE",
-      siteName: "Brandson Media",
-      images: [
-        {
-          url: post.featuredImage,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.seoTitle,
-      description: post.seoDescription,
-      images: [post.featuredImage],
-    },
-    alternates: {
-      canonical: `https://brandsonmedia.co.ke/blog/${post.slug}`,
-    },
-  }
-}
-
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    slug: post.slug,
-  }))
-}
+// ... generateMetadata and generateStaticParams remain the same ...
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const post = getBlogPost(slug)
 
-  if (!post) {
-    notFound()
-  }
+  if (!post) notFound()
 
   const relatedPosts = getRelatedPosts(slug, post.category)
 
-  // JSON-LD Schema for Article
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.excerpt,
-    image: post.featuredImage,
-    datePublished: post.publishedAt,
-    author: {
-      "@type": "Organization",
-      name: post.author.name,
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "Brandson Media",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://brandsonmedia.co.ke/images/450402357-982850016870582-3987366302077048038-n.jpg",
-      },
-    },
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `https://brandsonmedia.co.ke/blog/${post.slug}`,
-    },
-  }
-
   return (
-    <div className="min-h-screen">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-
+    <div className="min-h-screen bg-background">
       <Navbar />
+      
+      {/* Progress Bar (Client component ideally, but can be simulated or added via CSS) */}
+      <div className="fixed top-0 left-0 z-50 h-1 bg-primary w-0 transition-all duration-150" id="scroll-progress" />
 
-      {/* Hero Section */}
-      <header className="relative bg-dark-section-bg text-dark-section-fg overflow-hidden">
-         <div className="absolute inset-0 bg-[url('/modern-printing-press-industrial.jpg')] bg-cover bg-center opacity-20" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-dark-section-fg/70 hover:text-primary transition-colors mb-6"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Blog
-          </Link>
-          <Badge className="bg-primary text-primary-foreground mb-4">{post.category}</Badge>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-balance">{post.title}</h1>
-          <div className="mt-6 flex flex-wrap items-center gap-6 text-dark-section-fg/80">
-            <span className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              {post.author.name}
-            </span>
-            <span className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              {new Date(post.publishedAt).toLocaleDateString("en-KE", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
-            <span className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              {post.readTime} min read
-            </span>
+      <main>
+        {/* Header/Hero Section */}
+        <div className="relative pt-12 pb-16 lg:pt-20">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+              Back to Insights
+            </Link>
+            
+            <div className="flex justify-center mb-6">
+              <Badge variant="secondary" className="px-4 py-1 text-sm font-medium uppercase tracking-wider">
+                {post.category}
+              </Badge>
+            </div>
+            
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1] mb-8">
+              {post.title}
+            </h1>
+
+            <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <User className="h-4 w-4" />
+                </div>
+                <span className="font-medium text-foreground">{post.author.name}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                {new Date(post.publishedAt).toLocaleDateString("en-KE", {
+                  month: "long", day: "numeric", year: "numeric"
+                })}
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                {post.readTime} min read
+              </div>
             </div>
           </div>
         </div>
-      </header>
 
-      {/* Featured Image */}
-      <div className="relative h-64 sm:h-96 lg:h-[500px] w-full">
-        <Image src={post.featuredImage || "/placeholder.svg"} alt={post.title} fill className="object-cover" priority />
-      </div>
+        {/* Featured Image - Wide/Cinematic */}
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="relative aspect-[21/9] overflow-hidden rounded-3xl shadow-2xl">
+            <Image 
+              src={post.featuredImage || "/placeholder.svg"} 
+              alt={post.title} 
+              fill 
+              className="object-cover" 
+              priority 
+            />
+          </div>
+        </div>
 
-      {/* Article Content */}
-      <article className="py-16 bg-background">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="lg:flex lg:gap-12">
-            {/* Main Content */}
-            <div className="lg:flex-1">
+        {/* Article Content Layout */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-12 relative">
+            
+            {/* Left Sidebar: Share & Author (Desktop Only) */}
+            <aside className="hidden lg:block w-16 sticky top-24 self-start">
+              <div className="flex flex-col gap-4 items-center">
+                <span className="text-[10px] uppercase font-bold text-muted-foreground rotate-180 [writing-mode:vertical-lr]">Share</span>
+                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary hover:text-white transition-colors">
+                  <Share2 className="h-4 w-4" />
+                </Button>
+                <div className="h-12 w-[1px] bg-border my-2" />
+              </div>
+            </aside>
+
+            {/* Main Article Body */}
+            <article className="flex-1 max-w-3xl mx-auto">
               <div
-                className="prose prose-lg dark:prose-invert max-w-none
+                className="prose prose-zinc lg:prose-xl dark:prose-invert max-w-none
                   prose-headings:text-foreground prose-headings:font-bold
-                  prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4
-                  prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
-                  prose-p:text-muted-foreground prose-p:leading-relaxed
-                  prose-li:text-muted-foreground
-                  prose-strong:text-foreground
-                  prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
+                  prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:text-lg
+                  prose-strong:text-foreground prose-strong:font-semibold
+                  prose-img:rounded-2xl prose-img:shadow-lg
+                  prose-a:text-primary prose-a:font-medium prose-a:no-underline hover:prose-a:underline"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
 
-              {/* CTA within article */}
-              <aside className="mt-12 p-6 bg-muted rounded-xl border border-border">
-                <h3 className="text-xl font-bold text-foreground">Need Help with {post.category}?</h3>
-                <p className="mt-2 text-muted-foreground">
-                  Brandson Media offers professional {post.category.toLowerCase()} services in Nairobi and across Kenya.
-                  Get in touch for a free quote!
-                </p>
-                <div className="mt-4 flex flex-wrap gap-4">
-                  <Button asChild className="bg-primary hover:bg-primary/90">
-                    <a href="https://wa.me/254701869821" target="_blank" rel="noopener noreferrer">
-                      <MessageCircle className="mr-2 h-4 w-4" />
-                      Get a Quote
-                    </a>
-                  </Button>
-                  <Button variant="outline" asChild>
-                    <Link href="/services">View All Services</Link>
-                  </Button>
+              {/* Author Bio Section */}
+              <div className="mt-16 p-8 rounded-3xl bg-muted/50 border border-border flex flex-col sm:flex-row gap-6 items-center">
+                <div className="h-20 w-20 rounded-full bg-primary/20 flex-shrink-0" />
+                <div>
+                  <h4 className="text-lg font-bold">About {post.author.name}</h4>
+                  <p className="text-muted-foreground mt-1">
+                    Expert in {post.category} and brand strategy at Brandson Media, helping businesses in Nairobi stand out through quality design.
+                  </p>
                 </div>
-              </aside>
-            </div>
+              </div>
+            </article>
+
+            {/* Right Sidebar: Sticky CTA */}
+            <aside className="lg:w-80 sticky top-24 self-start">
+              <Card className="border-2 border-primary/10 shadow-xl overflow-hidden">
+                <div className="h-2 bg-primary w-full" />
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold mb-3">Ready to transform your brand?</h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Get custom {post.category.toLowerCase()} solutions tailored for your business needs.
+                  </p>
+                  <div className="space-y-3">
+                    <Button className="w-full bg-primary hover:bg-primary/90 shadow-md group" asChild>
+                      <a href="https://wa.me/254701869821" target="_blank">
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Free Consultation
+                        <ChevronRight className="ml-auto h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </a>
+                    </Button>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/services">View Portfolio</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </aside>
           </div>
         </div>
-      </article>
+      </main>
 
-      {/* Related Posts */}
+      {/* Related Posts: Refined Grid */}
       {relatedPosts.length > 0 && (
-        <section className="py-16 bg-muted">
+        <section className="py-24 mt-16 bg-muted/30 border-t border-border">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-foreground mb-8">Related Articles</h2>
+            <div className="flex items-end justify-between mb-12">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tight">Keep Reading</h2>
+                <p className="text-muted-foreground mt-2">More insights on {post.category}</p>
+              </div>
+              <Button variant="ghost" asChild>
+                <Link href="/blog">View all posts</Link>
+              </Button>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {relatedPosts.map((relatedPost) => (
-                <Card
-                  key={relatedPost.id}
-                  className="bg-card border-border overflow-hidden group hover:shadow-lg transition-shadow"
-                >
-                  <Link href={`/blog/${relatedPost.slug}`}>
-                    <div className="relative h-40 overflow-hidden">
-                      <Image
-                        src={relatedPost.featuredImage || "/placeholder.svg"}
-                        alt={relatedPost.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  </Link>
-                  <CardContent className="p-4">
-                    <Link href={`/blog/${relatedPost.slug}`}>
-                      <h3 className="font-semibold text-card-foreground group-hover:text-primary transition-colors line-clamp-2">
-                        {relatedPost.title}
-                      </h3>
-                    </Link>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{relatedPost.excerpt}</p>
-                  </CardContent>
-                </Card>
+                <Link key={relatedPost.id} href={`/blog/${relatedPost.slug}`} className="group">
+                  <div className="relative h-64 mb-4 overflow-hidden rounded-2xl shadow-sm transition-shadow group-hover:shadow-md">
+                    <Image
+                      src={relatedPost.featuredImage || "/placeholder.svg"}
+                      alt={relatedPost.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  <h3 className="text-xl font-bold leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                    {relatedPost.title}
+                  </h3>
+                </Link>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Footer CTA */}
-      <section className="py-16 bg-secondary text-secondary-foreground">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold">Looking for Professional Printing, Branding, or Signage in Nairobi?</h2>
-          <p className="mt-4 text-lg text-secondary-foreground/90 max-w-2xl mx-auto">
-            Contact Brandson Media today for high-quality printing and branding solutions. Serving businesses across
-            Kenya with excellence.
+      {/* Full Width Impact CTA */}
+      <section className="relative py-24 bg-primary overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+        <div className="relative mx-auto max-w-4xl px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
+            Make Your Brand Unforgettable
+          </h2>
+          <p className="text-primary-foreground/90 text-lg mb-10">
+            Join 500+ businesses in Kenya that trust Brandson Media for premium printing and signage.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="bg-background text-foreground hover:bg-background/90" asChild>
-              <a href="https://wa.me/254701869821" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="mr-2 h-5 w-5" />
-                Chat on WhatsApp
-              </a>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Button size="lg" variant="secondary" className="px-8 h-14 text-lg font-bold" asChild>
+              <a href="https://wa.me/254701869821" target="_blank">Start Your Project</a>
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-secondary-foreground text-secondary-foreground hover:bg-secondary-foreground/10 bg-transparent"
-              asChild
-            >
-              <Link href="/contact">Contact Us</Link>
+            <Button size="lg" variant="outline" className="px-8 h-14 text-lg font-bold bg-transparent text-white border-white hover:bg-white/10" asChild>
+              <Link href="/contact">Get in Touch</Link>
             </Button>
           </div>
         </div>

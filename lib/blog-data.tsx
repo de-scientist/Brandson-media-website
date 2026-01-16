@@ -58,7 +58,7 @@ export const blogPosts: BlogPost[] = [
 
     <p><strong>Brandson Media</strong> provides professional LED billboard solutions, from design to deployment, helping businesses turn attention into action.</p>
   `,
-  featuredImage: "/led-billboard-advertising-nairobi-kenya.jpg",
+  featuredImage: "/led-billboard-advertising-nairobi-kenya.jfif",
   category: "Outdoor Advertising",
   author: {
     name: "Brandson Media Team",
