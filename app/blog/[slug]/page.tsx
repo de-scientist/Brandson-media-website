@@ -199,7 +199,7 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       {/* Full Width Impact CTA */}
-      <section className="relative py-24 bg-primary overflow-hidden">
+      <section className="relative py-25 bg-primary overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
