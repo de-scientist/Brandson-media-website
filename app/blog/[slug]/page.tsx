@@ -114,7 +114,8 @@ export default async function BlogPostPage({ params }: Props) {
             </aside>
 
             {/* Main Article Body */}
-            <article className="flex-1 max-w-3xl mx-auto">
+          
+  <article className="flex-1 max-w-3xl mx-auto">
   <div
     className="prose prose-zinc lg:prose-xl dark:prose-invert max-w-none
       prose-headings:text-foreground 
@@ -146,8 +147,11 @@ export default async function BlogPostPage({ params }: Props) {
       prose-a:no-underline 
       hover:prose-a:underline 
       hover:prose-a:text-primary/80"
-    dangerouslySetInnerHTML={{ __html: post.content }}
-  />
+  >
+    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+      {post.content}
+    </ReactMarkdown>
+  </div>
 
               {/* Author Bio Section */}
               <div className="mt-16 p-8 rounded-3xl bg-muted/50 border border-border flex flex-col sm:flex-row gap-6 items-center">
