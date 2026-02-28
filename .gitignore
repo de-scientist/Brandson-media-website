@@ -27,7 +27,6 @@ yarn-error.log*
 next-env.d.ts
 
 # videos
-*.mp4
 *.mov
 *.mkv
 *.avi
