@@ -97,18 +97,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <Image
-              src="/images/brand.png"
-              alt="Brandson Media Logo"
-              width={150}
-              height={40}
-              // className="h-10 w-auto bg-white rounded p-1"
-            />
+            <Image src="/images/brand.png" alt="Brandson Media Logo" width={150} height={40} />
+
             <p className="text-sm text-dark-section-fg/80 leading-relaxed">
               Turning ideas into powerful visual brands. Your trusted partner for printing, branding, signage, and
               promotional solutions in Nairobi, Kenya.
             </p>
-            <div className="flex items-center gap-3 pt-2">
+
+            {/* Socials (responsive wrap) */}
+            <div className="flex flex-wrap items-center gap-3 pt-2">
               {socials.map((social) => (
                 <a
                   key={social.name}
@@ -130,10 +127,7 @@ export function Footer() {
             <ul className="space-y-2">
               {services.map((item) => (
                 <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-dark-section-fg/80 hover:text-primary transition-colors"
-                  >
+                  <Link href={item.href} className="text-sm text-dark-section-fg/80 hover:text-primary transition-colors">
                     {item.name}
                   </Link>
                 </li>
@@ -147,10 +141,7 @@ export function Footer() {
             <ul className="space-y-2">
               {company.map((item) => (
                 <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-dark-section-fg/80 hover:text-primary transition-colors"
-                  >
+                  <Link href={item.href} className="text-sm text-dark-section-fg/80 hover:text-primary transition-colors">
                     {item.name}
                   </Link>
                 </li>
@@ -199,25 +190,21 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Bottom bar (centered + designer credit) */}
         <div className="mt-12 pt-8 border-t border-dark-section-fg/20">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col items-center justify-center gap-2 text-center">
             <p className="text-sm text-dark-section-fg/60">
               &copy; {new Date().getFullYear()} Brandson Media. All rights reserved.
+              <span className="mx-2 text-dark-section-fg/40">•</span>
+              <a
+                href="https://mark-tech.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-dark-section-fg/60 hover:text-primary transition-colors"
+              >
+                Designed by DeScientist
+              </a>
             </p>
-            <div className="flex items-center gap-3">
-              {socials.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full bg-dark-section-fg/10 hover:bg-primary transition-colors"
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
           </div>
         </div>
       </div>

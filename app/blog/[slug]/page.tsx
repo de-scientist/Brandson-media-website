@@ -1,256 +1,479 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
 import { notFound } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  ArrowLeft, 
-  MessageCircle, 
-  Share2, 
-  ChevronRight 
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  MessageCircle,
+  Share2,
+  Bookmark,
+  ChevronRight,
 } from "lucide-react"
-import { blogPosts, getBlogPost, getRelatedPosts } from "@/lib/blog-data"
+import { blogPosts } from "@/lib/blog-data"
 
-type Props = {
-  params: Promise<{ slug: string }>
+// npm i react-markdown remark-gfm
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+
+type Params = {
+  params: Promise<{ slug: string }> | { slug: string }
 }
 
-// ... generateMetadata and generateStaticParams remain the same ...
+function buildTocFromMarkdown(md: string) {
+  const lines = md.split("\n")
+  const items: { depth: 2 | 3; text: string; id: string }[] = []
 
-export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params
-  const post = getBlogPost(slug)
+  for (const line of lines) {
+    const m = /^(##|###)\s+(.+)$/.exec(line.trim())
+    if (!m) continue
+    const depth = m[1] === "##" ? (2 as const) : (3 as const)
+    const text = m[2].replace(/\*\*/g, "").trim()
+    const id = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .trim()
+      .replace(/\s+/g, "-")
+    if (!text) continue
+    items.push({ depth, text, id })
+  }
 
+  const seen = new Map<string, number>()
+  return items.map((it) => {
+    const count = seen.get(it.id) ?? 0
+    seen.set(it.id, count + 1)
+    const id = count ? `${it.id}-${count + 1}` : it.id
+    return { ...it, id }
+  })
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const resolved = await Promise.resolve(params)
+  const post = blogPosts.find((p) => p.slug === resolved.slug)
+  if (!post) return {}
+
+  return {
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt || "Read the latest article.",
+    openGraph: {
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt || "Read the latest article.",
+      images: post.featuredImage ? [{ url: post.featuredImage }] : undefined,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.seoTitle || post.title,
+      description: post.seoDescription || post.excerpt || "Read the latest article.",
+      images: post.featuredImage ? [post.featuredImage] : undefined,
+    },
+  }
+}
+
+export default async function BlogSlugPage({ params }: Params) {
+  const resolved = await Promise.resolve(params)
+  const post = blogPosts.find((p) => p.slug === resolved.slug)
   if (!post) notFound()
 
-  const relatedPosts = getRelatedPosts(slug, post.category)
+  const toc = buildTocFromMarkdown(post.content)
+  const hasToc = toc.length >= 3
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://example.com"
+  const canonical = `${siteUrl}/blog/${post.slug}`
+  const shareText = encodeURIComponent(post.title)
+  const shareUrl = encodeURIComponent(canonical)
+
+  const related = blogPosts
+    .filter((p) => p.slug !== post.slug)
+    .filter((p) => p.category === post.category)
+    .slice(0, 3)
+
+  const fallbackRelated = related.length
+    ? related
+    : blogPosts.filter((p) => p.slug !== post.slug).slice(0, 3)
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
-      {/* Progress Bar (Client component ideally, but can be simulated or added via CSS) */}
-      <div className="fixed top-0 left-0 z-50 h-1 bg-primary w-0 transition-all duration-150" id="scroll-progress" />
 
-      <main>
-        {/* Header/Hero Section */}
-        <div className="relative pt-12 pb-16 lg:pt-20">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group"
-            >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              Back to Insights
-            </Link>
-            
-            <div className="flex justify-center mb-6">
-              <Badge variant="secondary" className="px-4 py-1 text-sm font-medium uppercase tracking-wider">
-                {post.category}
-              </Badge>
+      {/* Ambient header */}
+      <div className="relative border-b">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-muted/60 via-background to-background" />
+        <div className="relative mx-auto w-full max-w-7xl px-4 py-10 md:px-8">
+          {/* Breadcrumb + Back */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Link href="/" className="hover:text-foreground transition-colors">
+                Home
+              </Link>
+              <ChevronRight className="h-4 w-4" />
+              <Link href="/blog" className="hover:text-foreground transition-colors">
+                Blog
+              </Link>
+              <ChevronRight className="h-4 w-4" />
+              <span className="line-clamp-1 max-w-[40ch] text-foreground/80">
+                {post.title}
+              </span>
             </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1] mb-8">
+
+            <Button asChild variant="ghost" className="gap-2">
+              <Link href="/blog">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Blog
+              </Link>
+            </Button>
+          </div>
+
+          {/* Title block */}
+          <div className="mt-6 grid gap-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="secondary">{post.category}</Badge>
+            </div>
+
+            <h1 className="text-balance text-3xl font-semibold leading-tight tracking-tight md:text-5xl">
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-                  <User className="h-4 w-4" />
-                </div>
-                <span className="font-medium text-foreground">{post.author.name}</span>
-              </div>
+            {post.excerpt && (
+              <p className="max-w-3xl text-pretty text-base text-muted-foreground md:text-lg">
+                {post.excerpt}
+              </p>
+            )}
+
+            {/* Meta */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                {new Date(post.publishedAt).toLocaleDateString("en-KE", {
-                  month: "long", day: "numeric", year: "numeric"
-                })}
+                <span>{post.publishedAt}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                {post.readTime} min read
+                <span>{post.readTime} min read</span>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Featured Image - Wide/Cinematic */}
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="relative aspect-[21/9] overflow-hidden rounded-3xl shadow-2xl">
-            <Image 
-              src={post.featuredImage || "/placeholder.svg"} 
-              alt={post.title} 
-              fill 
-              className="object-cover" 
-              priority 
-            />
-          </div>
-        </div>
-
-        {/* Article Content Layout */}
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-12 relative">
-            
-            {/* Left Sidebar: Share & Author (Desktop Only) */}
-            <aside className="hidden lg:block w-16 sticky top-24 self-start">
-              <div className="flex flex-col gap-4 items-center">
-                <span className="text-[10px] uppercase font-bold text-muted-foreground rotate-180 [writing-mode:vertical-lr]">Share</span>
-                <Button variant="outline" size="icon" className="rounded-full hover:bg-primary hover:text-white transition-colors">
-                  <Share2 className="h-4 w-4" />
-                </Button>
-                <div className="h-12 w-[1px] bg-border my-2" />
-              </div>
-            </aside>
-
-            {/* Main Article Body */}
-          
-  <article className="flex-1 max-w-3xl mx-auto">
-  <div
-    className="prose prose-zinc lg:prose-xl dark:prose-invert max-w-none
-      prose-headings:text-foreground 
-      prose-headings:font-bold 
-      prose-headings:tracking-tight
-      prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:border-b prose-h2:pb-2
-      prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4
-      prose-p:text-muted-foreground/90 
-      prose-p:leading-relaxed 
-      prose-p:mb-6
-      prose-strong:text-foreground 
-      prose-strong:font-bold 
-      prose-strong:bg-primary/5 
-      prose-strong:px-1 
-      prose-strong:rounded
-      prose-li:text-muted-foreground 
-      prose-ul:list-disc prose-ul:pl-6
-      prose-ol:list-decimal prose-ol:pl-6
-      prose-blockquote:border-l-primary 
-      prose-blockquote:bg-muted/30 
-      prose-blockquote:py-2 
-      prose-blockquote:pr-4 
-      prose-blockquote:rounded-r-lg
-      prose-blockquote:italic
-      prose-img:rounded-2xl 
-      prose-img:shadow-xl
-      prose-a:text-primary 
-      prose-a:font-semibold 
-      prose-a:no-underline 
-      hover:prose-a:underline 
-      hover:prose-a:text-primary/80"
-  >
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-      {post.content}
-    </ReactMarkdown>
-  </div>
-
-              {/* Author Bio Section */}
-              <div className="mt-16 p-8 rounded-3xl bg-muted/50 border border-border flex flex-col sm:flex-row gap-6 items-center">
-                <div className="h-20 w-20 rounded-full bg-primary/20 flex-shrink-0" />
-                <div>
-                  <h4 className="text-lg font-bold">About {post.author.name}</h4>
-                  <p className="text-muted-foreground mt-1">
-                    Expert in {post.category} and brand strategy at Brandson Media, helping businesses in Nairobi stand out through quality design.
-                  </p>
+            {/* Hero media */}
+            {post.featuredImage ? (
+              <div className="mt-4 overflow-hidden rounded-2xl border bg-muted/30 shadow-sm">
+                <div className="relative aspect-[16/7] w-full">
+                  <Image
+                    src={post.featuredImage}
+                    alt={post.title}
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                  />
                 </div>
               </div>
-            </article>
+            ) : null}
+          </div>
+        </div>
+      </div>
 
-            {/* Right Sidebar: Sticky CTA */}
-            <aside className="lg:w-80 sticky top-24 self-start">
-              <Card className="border-2 border-primary/10 shadow-xl overflow-hidden">
-                <div className="h-2 bg-primary w-full" />
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-3">Ready to transform your brand?</h3>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    Get custom {post.category.toLowerCase()} solutions tailored for your business needs.
-                  </p>
-                  <div className="space-y-3">
-                    <Button className="w-full bg-primary hover:bg-primary/90 shadow-md group" asChild>
-                      <a href="https://wa.me/254701869821" target="_blank">
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Free Consultation
-                        <ChevronRight className="ml-auto h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </a>
+      {/* Article layout */}
+      <main className="mx-auto w-full max-w-7xl px-4 py-10 md:px-8">
+        <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+          {/* Main content */}
+          <article className="min-w-0">
+            <Card className="overflow-hidden rounded-2xl border-muted/60 shadow-sm">
+              <CardContent className="p-6 md:p-10">
+                {/* Author + actions */}
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b pb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="relative h-10 w-10 overflow-hidden rounded-full bg-muted">
+                      {post.author?.avatar ? (
+                        <Image
+                          src={post.author.avatar}
+                          alt={post.author.name}
+                          fill
+                          className="object-cover"
+                          sizes="40px"
+                        />
+                      ) : (
+                        <div className="h-full w-full grid place-items-center">
+                          <Bookmark className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="leading-tight">
+                      <p className="text-sm font-medium text-foreground">
+                        {post.author?.name || "Brandson Media"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {post.category}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button asChild variant="outline" className="gap-2">
+                      <Link
+                        href={`https://wa.me/?text=${encodeURIComponent(
+                          `${post.title} — ${canonical}`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <MessageCircle className="h-4 w-4" />
+                        WhatsApp
+                      </Link>
                     </Button>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link href="/services">View Portfolio</Link>
+
+                    <Button asChild variant="default" className="gap-2">
+                      <Link
+                        href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        Share
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div
+                  className="
+                    prose prose-neutral dark:prose-invert
+                    max-w-none
+                    prose-headings:scroll-mt-24
+                    prose-h2:text-2xl prose-h2:tracking-tight
+                    prose-h3:text-xl prose-h3:tracking-tight
+                    prose-p:leading-relaxed
+                    prose-a:no-underline hover:prose-a:underline
+                    prose-blockquote:border-l-muted-foreground/30
+                    prose-blockquote:bg-muted/40 prose-blockquote:rounded-xl prose-blockquote:px-4 prose-blockquote:py-3
+                    prose-code:rounded prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5
+                    prose-pre:rounded-2xl prose-pre:border prose-pre:bg-muted/30
+                    prose-hr:border-muted/60
+                    prose-img:rounded-2xl prose-img:border
+                  "
+                >
+                 <ReactMarkdown
+  remarkPlugins={[remarkGfm]}
+  components={{
+    h1: ({ children, ...props }) => (
+      <h1
+        className="mt-10 mb-6 text-3xl md:text-4xl font-bold tracking-tight leading-tight border-b pb-4"
+        {...props}
+      >
+        {children}
+      </h1>
+    ),
+
+    h2: ({ children, ...props }) => {
+      const text = String(children)
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+
+      return (
+        <h2
+          id={id}
+          className="mt-14 mb-5 text-2xl md:text-3xl font-semibold tracking-tight leading-snug border-l-4 border-primary pl-4"
+          {...props}
+        >
+          {children}
+        </h2>
+      )
+    },
+
+    h3: ({ children, ...props }) => {
+      const text = String(children)
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+
+      return (
+        <h3
+          id={id}
+          className="mt-10 mb-4 text-xl md:text-2xl font-semibold tracking-tight text-foreground/90"
+          {...props}
+        >
+          {children}
+        </h3>
+      )
+    },
+
+    h4: ({ children, ...props }) => (
+      <h4
+        className="mt-8 mb-3 text-lg font-semibold text-foreground/80"
+        {...props}
+      >
+        {children}
+      </h4>
+    ),
+
+    p: ({ children, ...props }) => (
+      <p
+        className="mb-6 leading-relaxed text-base md:text-lg text-foreground/90"
+        {...props}
+      >
+        {children}
+      </p>
+    ),
+
+    ul: ({ children, ...props }) => (
+      <ul className="mb-6 list-disc pl-6 space-y-2" {...props}>
+        {children}
+      </ul>
+    ),
+
+    ol: ({ children, ...props }) => (
+      <ol className="mb-6 list-decimal pl-6 space-y-2" {...props}>
+        {children}
+      </ol>
+    ),
+
+    blockquote: ({ children, ...props }) => (
+      <blockquote
+        className="my-8 rounded-xl border-l-4 border-primary bg-muted/40 px-5 py-4 italic text-foreground/80"
+        {...props}
+      >
+        {children}
+      </blockquote>
+    ),
+
+    hr: () => <hr className="my-12 border-muted/60" />,
+
+    a: ({ children, ...props }) => (
+      <a
+        className="font-medium text-primary underline-offset-4 hover:underline"
+        {...props}
+      >
+        {children}
+      </a>
+    ),
+
+    img: ({ ...props }) => (
+      <img
+        className="my-8 rounded-2xl border shadow-sm"
+        {...props}
+      />
+    ),
+  }}
+>
+  {post.content}
+</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Related */}
+            <div className="mt-8">
+              <div className="flex items-end justify-between gap-3">
+                <h2 className="text-lg font-semibold tracking-tight">
+                  Related reads
+                </h2>
+                <Button asChild variant="ghost" className="gap-2">
+                  <Link href="/blog">
+                    View all <ChevronRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+
+              <div className="mt-4 grid gap-4 md:grid-cols-3">
+                {fallbackRelated.map((p) => (
+                  <Link key={p.slug} href={`/blog/${p.slug}`} className="group block">
+                    <Card className="h-full overflow-hidden rounded-2xl border-muted/60 transition-shadow group-hover:shadow-md">
+                      <CardContent className="p-5">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Badge variant="secondary" className="rounded-full">
+                            {p.category}
+                          </Badge>
+                          <span className="line-clamp-1">{p.publishedAt}</span>
+                        </div>
+                        <h3 className="mt-3 line-clamp-2 text-base font-semibold tracking-tight">
+                          {p.title}
+                        </h3>
+                        <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
+                          {p.excerpt}
+                        </p>
+                        <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium">
+                          Read more{" "}
+                          <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          {/* Sidebar */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-24 space-y-4">
+              {/* TOC */}
+              {hasToc ? (
+                <Card className="rounded-2xl border-muted/60 shadow-sm">
+                  <CardContent className="p-6">
+                    <p className="text-sm font-semibold tracking-tight">
+                      On this page
+                    </p>
+                    <div className="mt-4 space-y-2">
+                      {toc.map((item) => (
+                        <a
+                          key={item.id}
+                          href={`#${item.id}`}
+                          className={[
+                            "block text-sm text-muted-foreground hover:text-foreground transition-colors",
+                            item.depth === 3 ? "pl-4" : "pl-0",
+                          ].join(" ")}
+                        >
+                          {item.text}
+                        </a>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : null}
+
+              {/* CTA */}
+              <Card className="rounded-2xl border-muted/60 shadow-sm">
+                <CardContent className="p-6">
+                  <p className="text-sm font-semibold tracking-tight">
+                    Want this done professionally?
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Clean prints. Bold branding. Fast turnaround. Let’s quote your job and move.
+                  </p>
+
+                  <div className="mt-4 grid gap-2">
+                    <Button asChild className="w-full">
+                      <Link href="/quote">Get Quote</Link>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full gap-2">
+                      <Link href="/contact">
+                        <MessageCircle className="h-4 w-4" />
+                        Talk to us
+                      </Link>
                     </Button>
                   </div>
                 </CardContent>
               </Card>
-            </aside>
-          </div>
+            </div>
+          </aside>
         </div>
       </main>
 
-      {/* Related Posts: Refined Grid */}
-      {relatedPosts.length > 0 && (
-        <section className="py-24 mt-16 bg-muted/30 border-t border-border">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex items-end justify-between mb-12">
-              <div>
-                <h2 className="text-3xl font-bold tracking-tight">Keep Reading</h2>
-                <p className="text-muted-foreground mt-2">More insights on {post.category}</p>
-              </div>
-              <Button variant="ghost" asChild>
-                <Link href="/blog">View all posts</Link>
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedPosts.map((relatedPost) => (
-                <Link key={relatedPost.id} href={`/blog/${relatedPost.slug}`} className="group">
-                  <div className="relative h-64 mb-4 overflow-hidden rounded-2xl shadow-sm transition-shadow group-hover:shadow-md">
-                    <Image
-                      src={relatedPost.featuredImage || "/placeholder.svg"}
-                      alt={relatedPost.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <h3 className="text-xl font-bold leading-snug group-hover:text-primary transition-colors line-clamp-2">
-                    {relatedPost.title}
-                  </h3>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Full Width Impact CTA */}
-      <section className="relative py-25 bg-primary overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
-        <div className="relative mx-auto max-w-4xl px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
-            Make Your Brand Unforgettable
-          </h2>
-          <p className="text-primary-foreground/90 text-lg mb-10">
-            Join 500+ businesses in Kenya that trust Brandson Media for premium printing and signage.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button size="lg" variant="secondary" className="px-8 h-14 text-lg font-bold" asChild>
-              <a href="https://wa.me/254701869821" target="_blank">Start Your Project</a>
-            </Button>
-            <Button size="lg" variant="outline" className="px-8 h-14 text-lg font-bold bg-transparent text-white border-white hover:bg-white/10" asChild>
-              <Link href="/contact">Get in Touch</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
       <WhatsAppButton />
+      <Footer />
     </div>
   )
 }
