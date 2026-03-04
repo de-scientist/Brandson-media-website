@@ -6,6 +6,8 @@ A modern, responsive website for **Brandson Media** — a leading printing, bran
 
 ## About Brandson Media
 
+###We Brand. We Design. We Print.
+
 **Brandson Media** is a premier printing and branding solutions provider dedicated to helping businesses create powerful visual identities. With over 10 years of experience and 500+ satisfied clients across Kenya, we specialize in:
 
 - **Large Format Printing** — Banners, posters, billboards, and wall graphics
