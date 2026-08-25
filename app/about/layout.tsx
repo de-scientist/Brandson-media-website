@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import type { ReactNode } from "react"
 
 export const metadata: Metadata = {
   title: "About Brandson Media | Printing, Branding & Signage Studio in Nairobi",
@@ -10,4 +11,8 @@ export const metadata: Metadata = {
     description: "A Nairobi printing, branding, and signage studio built for Kenyan businesses.",
     type: "website",
   },
+}
+
+export default function Layout({ children }: { children: ReactNode }) {
+  return children
 }
