@@ -7,28 +7,26 @@ import { usePathname } from "next/navigation"
 import { Menu, X, Phone, Mail, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-
-const navigation = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Portfolio", href: "/portfolio" },
-  { name: "Blog", href: "/blog" },
-  { name: "Testimonials", href: "/testimonials" },
-  { name: "Contact", href: "/contact" },
-]
+import { navigation, business } from "@/lib/site"
 
 type UnderlineStyle = { left: number; width: number; opacity: number }
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
 
-  // Desktop underline animation state
   const navWrapRef = useRef<HTMLDivElement | null>(null)
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
   const [underline, setUnderline] = useState<UnderlineStyle>({ left: 0, width: 0, opacity: 0 })
   const [hoveredHref, setHoveredHref] = useState<string | null>(null)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/"
@@ -36,7 +34,6 @@ export function Navbar() {
   }
 
   const activeHref = useMemo(() => {
-    // pick the most specific matching route
     const matches = navigation.filter((n) => isActive(n.href))
     if (!matches.length) return "/"
     return matches.sort((a, b) => b.href.length - a.href.length)[0].href
@@ -46,10 +43,8 @@ export function Navbar() {
     const wrap = navWrapRef.current
     const el = linkRefs.current[href]
     if (!wrap || !el) return
-
     const wrapRect = wrap.getBoundingClientRect()
     const elRect = el.getBoundingClientRect()
-
     setUnderline({
       left: elRect.left - wrapRect.left,
       width: elRect.width,
@@ -57,53 +52,56 @@ export function Navbar() {
     })
   }
 
-  // Position underline on route change + first mount
   useEffect(() => {
-    // small delay ensures layout is ready (fonts/images)
-    const t = window.setTimeout(() => {
-      setUnderlineTo(activeHref, true)
-    }, 0)
+    const t = window.setTimeout(() => setUnderlineTo(activeHref, true), 0)
     return () => window.clearTimeout(t)
   }, [activeHref])
 
-  // Keep underline aligned on resize
   useEffect(() => {
-    const onResize = () => {
-      const target = hoveredHref ?? activeHref
-      setUnderlineTo(target, true)
-    }
+    const onResize = () => setUnderlineTo(hoveredHref ?? activeHref, true)
     window.addEventListener("resize", onResize)
     return () => window.removeEventListener("resize", onResize)
   }, [activeHref, hoveredHref])
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <div className="bg-dark-section-bg text-dark-section-fg">
+    <header
+      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+        scrolled
+          ? "border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 shadow-sm"
+          : "border-transparent bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      }`}
+    >
+      {/* Utility bar */}
+      <div
+        className={`bg-dark-section-bg text-dark-section-fg transition-all duration-300 ${
+          scrolled ? "hidden md:block" : "block"
+        }`}
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-10 items-center justify-between text-sm">
             <div className="hidden sm:flex items-center gap-6">
               <a
-                href="mailto:brandsonmedia@gmail.com"
+                href={`mailto:${business.email}`}
                 className="flex items-center gap-2 hover:text-primary transition-colors"
               >
                 <Mail className="h-4 w-4" />
-                brandsonmedia@gmail.com
+                {business.email}
               </a>
-              <a href="tel:+254701869821" className="flex items-center gap-2 hover:text-primary transition-colors">
+              <a href={`tel:${business.phone.replace(/\s/g, "")}`} className="flex items-center gap-2 hover:text-primary transition-colors">
                 <Phone className="h-4 w-4" />
-                +254 701 869821
+                {business.phone}
               </a>
             </div>
 
             <div className="flex items-center gap-4 ml-auto">
-              <a href="mailto:brandsonmedia@gmail.com" className="hover:text-primary transition-colors" aria-label="Email us">
+              <a href={`mailto:${business.email}`} className="hover:text-primary transition-colors" aria-label="Email us">
                 <Mail className="h-4 w-4" />
               </a>
-              <a href="tel:+254701869821" className="hover:text-primary transition-colors" aria-label="Call us">
+              <a href={`tel:${business.phone.replace(/\s/g, "")}`} className="hover:text-primary transition-colors" aria-label="Call us">
                 <Phone className="h-4 w-4" />
               </a>
               <a
-                href="https://wa.me/254701869821"
+                href={`https://wa.me/${business.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-secondary transition-colors"
@@ -121,14 +119,13 @@ export function Navbar() {
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2" aria-label="Brandson Media home">
               <Image src="/images/brand.png" alt="Brandson Media Logo" width={150} height={40} className="h-10 w-auto" />
             </Link>
           </div>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex md:items-center md:gap-8 relative" ref={navWrapRef}>
-            {/* Glide underline */}
+          <div className="hidden md:flex md:items-center md:gap-7 relative" ref={navWrapRef}>
             <span
               aria-hidden="true"
               className="absolute -bottom-2 h-[1px] bg-primary transition-all duration-300 ease-out"
@@ -166,15 +163,18 @@ export function Navbar() {
             })}
 
             <Button asChild className="bg-primary hover:bg-primary/90">
-              <a href="https://wa.me/254701869821" target="_blank" rel="noopener noreferrer">
-                Get a Quote
-              </a>
+              <Link href="/contact">Get a Quote</Link>
             </Button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button type="button" className="p-2 text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <button
+              type="button"
+              className="p-2 text-foreground"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-expanded={mobileMenuOpen}
+            >
               <span className="sr-only">Open menu</span>
               {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
             </button>
@@ -184,15 +184,15 @@ export function Navbar() {
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden pb-4">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1">
               {navigation.map((item) => {
                 const active = isActive(item.href)
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`text-base font-medium transition-colors ${
-                      active ? "text-primary" : "text-muted-foreground hover:text-primary"
+                    className={`rounded-lg px-3 py-3 text-base font-medium transition-colors ${
+                      active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-primary"
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
@@ -201,9 +201,20 @@ export function Navbar() {
                 )
               })}
 
-              <Button asChild className="bg-primary hover:bg-primary/90 w-full">
-                <a href="https://wa.me/254701869821" target="_blank" rel="noopener noreferrer">
+              <Button asChild className="bg-primary hover:bg-primary/90 mt-2 w-full">
+                <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
                   Get a Quote
+                </Link>
+              </Button>
+              <Button asChild variant="secondary" className="w-full">
+                <a
+                  href={`https://wa.me/${business.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  WhatsApp Us
                 </a>
               </Button>
             </div>

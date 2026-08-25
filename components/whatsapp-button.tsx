@@ -1,12 +1,12 @@
 "use client"
+import { buildWhatsAppUrl, business } from "@/lib/site"
 
 export function WhatsAppButton() {
-  const phone = "254701869821"
-  const message = encodeURIComponent("Hello Brandson Media 👋, I would like to make an order.")
+  const href = buildWhatsAppUrl({ context: "I'd like to discuss a project or request a quote." })
 
   return (
     <a
-      href={`https://wa.me/${phone}?text=${message}`}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="group fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-secondary text-secondary-foreground rounded-full shadow-lg hover:scale-110 transition-transform"
