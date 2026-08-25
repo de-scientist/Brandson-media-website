@@ -116,7 +116,7 @@ const portfolioItems: PortfolioItem[] = [
   {
     title: "Promotional Pens (UV)",
     category: "UV Printing",
-    cover: "/branded-pens.jpg",
+    cover: "/uv-printed-promotional-items.jpg",
     client: "Corporate Client",
     year: "2024",
     summary: "High-volume UV branding on pens with clean alignment and consistent placement.",

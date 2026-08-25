@@ -73,7 +73,7 @@ const serviceCategories = [
     icon: Hotel,
     title: "Hotel & Conference Solutions",
     description: "Professional branded materials for hospitality and events.",
-    images: ["/IMG20260131172039.jpg", "/IMG20260130180600.jpg", "/promotional1.jpg", "/IMG20260126152115.jpg"],
+    images: ["/IMG20260131172039.jpg", "/corporate-event-branding-kenya.jpg", "/promotional1.jpg", "/IMG20260126152115.jpg"],
     items: [
       { subtitle: "Products", list: ["Branded conference pens", "Notepads & notebooks", "Attendance registers", "Training manuals & guides"] },
     ],

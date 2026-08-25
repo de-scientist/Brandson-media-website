@@ -52,7 +52,7 @@ const defaultSlides: HeroSlide[] = [
     subtitle: "Transform Your Business Identity",
     description:
       "High-quality corporate branding, uniforms, and promotional materials that make your brand stand out.",
-    cta: { text: "Get Started", href: "/quote", variant: "default" },
+    cta: { text: "Get Started", href: "/contact", variant: "default" },
     badge: "Popular",
     features: ["Premium Quality", "Fast Delivery", "Best Prices"],
   },

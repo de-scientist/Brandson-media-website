@@ -456,7 +456,7 @@ export default async function BlogSlugPage({ params }: Params) {
 
                   <div className="mt-4 grid gap-2">
                     <Button asChild className="w-full">
-                      <Link href="/quote">Get Quote</Link>
+                      <Link href="/contact">Get Quote</Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full gap-2">
                       <Link href="/contact">

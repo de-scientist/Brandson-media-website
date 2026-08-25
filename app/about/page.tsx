@@ -444,7 +444,7 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="py-18 bg-secondary text-secondary-foreground relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/pattern-dots.png')] bg-repeat" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(theme(colors.primary/40)_1px,transparent_1px)] [background-size:16px_16px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center py-16">
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
             Ready to Work With Us?
