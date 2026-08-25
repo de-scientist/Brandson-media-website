@@ -4,6 +4,7 @@ import { Inter, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { SiteJsonLd } from "@/components/site-json-ld"
 import "./globals.css"
 
 // Fonts (performance + SEO via Core Web Vitals)
@@ -67,6 +68,8 @@ export const metadata: Metadata = {
     apple: "/images/web-app-manifest-192x192.png",
   },
 
+  manifest: "/manifest.webmanifest",
+
   robots: {
     index: true,
     follow: true,
@@ -93,6 +96,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
+        <SiteJsonLd />
         <Analytics />
         <SpeedInsights />
       </body>
