@@ -1,5 +1,5 @@
 "use client"
-import { buildWhatsAppUrl, business } from "@/lib/site"
+import { buildWhatsAppUrl } from "@/lib/site"
 
 export function WhatsAppButton() {
   const href = buildWhatsAppUrl({ context: "I'd like to discuss a project or request a quote." })
